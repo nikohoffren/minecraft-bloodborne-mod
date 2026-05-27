@@ -1,0 +1,29 @@
+{
+	"schemaVersion": 1,
+	"id": "simple_weapon",
+	"version": "${version}",
+	"name": "Simple Weapon",
+	"description": "Adds a custom sword-style weapon for learning Fabric modding.",
+	"authors": [
+		"You"
+	],
+	"mixins": [
+		"simple_weapon.mixins.json"
+	],
+	"license": "CC0-1.0",
+	"environment": "*",
+	"entrypoints": {
+		"main": [
+			"dev.minecraftmods.simpleweapon.SimpleWeaponMod"
+		],
+		"client": [
+			"dev.minecraftmods.simpleweapon.SimpleWeaponModClient"
+		]
+	},
+	"depends": {
+		"fabricloader": ">=0.19.2",
+		"minecraft": "~1.21.1",
+		"java": ">=21",
+		"fabric-api": "*"
+	}
+}
