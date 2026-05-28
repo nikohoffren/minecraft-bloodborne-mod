@@ -185,3 +185,11 @@ Output: `build/libs/simple-weapon-mod-1.0.0.jar`
 
 Open as a Gradle project in IntelliJ IDEA or VS Code. Use the **Minecraft Client** run configuration, or `gradlew genSources` if needed.
 
+## WorldEdit
+
+Download the correct WorldEdit mod from
+- https://modrinth.com/plugin/worldedit/versions?l=fabric&g=1.21.1
+
+Drop the WorldEdit mod .jar file to the `/run/mods` directory.
+
+Added WorldEdit mod to easily construct buildings etc. to make the game look like Central Yharnam
