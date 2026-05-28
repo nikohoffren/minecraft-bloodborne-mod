@@ -3,6 +3,7 @@ package dev.minecraftmods.simpleweapon;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.rendering.v1.ColorProviderRegistry;
+import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BiomeColors;
 import net.minecraft.network.chat.Component;
@@ -10,47 +11,72 @@ import net.minecraft.world.level.block.Blocks;
 
 public class SimpleWeaponModClient implements ClientModInitializer {
 
+	private static int fadeTicks = 0;
+	private static boolean isFading = false;
+
+	private boolean hasStartedFade = false;
+
 	@Override
 	public void onInitializeClient() {
 
-		final boolean[] wasSleeping = {false};
-		final boolean[] hasShownMessage = {false};
-		final boolean[] hasSetTime = {false};
-
-		ClientTickEvents.END_CLIENT_TICK.register(client -> {
-
-			if (client.level == null) return;
-
-			// Set time once after world loads
-			if (!hasSetTime[0]) {
-				client.level.setDayTime(13000); // fixed twilight time
-				hasSetTime[0] = true;
+		// ✅ Draw black screen overlay
+		HudRenderCallback.EVENT.register((drawContext, tickDelta) -> {
+			if (isFading) {
+				drawContext.fill(
+						0,
+						0,
+						drawContext.guiWidth(),
+						drawContext.guiHeight(),
+						0xFF000000 // solid black
+				);
 			}
-
-			if (client.player == null) return;
-
-			// Show message once when joining
-			if (!hasShownMessage[0]) {
-				showBiomeMessage(client);
-				hasShownMessage[0] = true;
-			}
-
-			// Detect waking up from bed
-			boolean isSleeping = client.player.isSleeping();
-
-			if (wasSleeping[0] && !isSleeping) {
-				showBiomeMessage(client);
-			}
-
-			wasSleeping[0] = isSleeping;
 		});
 
-		// Grass darker
-		ColorProviderRegistry.BLOCK.register((state, view, pos, tintIndex) -> {
+		// ✅ Client tick logic
+		ClientTickEvents.END_CLIENT_TICK.register(client -> {
 
-			if (view == null || pos == null) {
-				return 0x2F3B2F; // fallback dark color
+			if (client.player == null || client.level == null) return;
+
+			// ✅ Start fade AFTER player is fully loaded
+			if (!hasStartedFade && client.player.tickCount > 20) {
+				startFade();
+				hasStartedFade = true;
 			}
+
+			// ✅ Handle fade timing
+			if (isFading) {
+				fadeTicks--;
+
+				if (fadeTicks == 20) {
+					// ✅ Show area title near end of fade
+					client.gui.setTitle(
+							Component.literal("Central Yharnam")
+									.withStyle(style -> style.withBold(true))
+					);
+				}
+
+				if (fadeTicks <= 0) {
+					isFading = false;
+				}
+			}
+		});
+
+		// ✅ Register darker color palette
+		registerColorProviders();
+	}
+
+	// ✅ Fade trigger
+	public static void startFade() {
+		isFading = true;
+		fadeTicks = 60; // ~3 seconds
+	}
+
+	// ✅ Block color overrides (safe with null checks)
+	private void registerColorProviders() {
+
+		// Dark grass
+		ColorProviderRegistry.BLOCK.register((state, view, pos, tintIndex) -> {
+			if (view == null || pos == null) return 0x2F3B2F;
 
 			int color = BiomeColors.getAverageGrassColor(view, pos);
 
@@ -62,12 +88,9 @@ public class SimpleWeaponModClient implements ClientModInitializer {
 
 		}, Blocks.GRASS_BLOCK);
 
-		// Leaves darker
+		// Dark leaves
 		ColorProviderRegistry.BLOCK.register((state, view, pos, tintIndex) -> {
-
-			if (view == null || pos == null) {
-				return 0x1F2A1F;
-			}
+			if (view == null || pos == null) return 0x1F2A1F;
 
 			int color = BiomeColors.getAverageFoliageColor(view, pos);
 
@@ -79,12 +102,9 @@ public class SimpleWeaponModClient implements ClientModInitializer {
 
 		}, Blocks.OAK_LEAVES, Blocks.BIRCH_LEAVES, Blocks.JUNGLE_LEAVES);
 
-		// Water darker
+		// Dark water
 		ColorProviderRegistry.BLOCK.register((state, view, pos, tintIndex) -> {
-
-			if (view == null || pos == null) {
-				return 0x0A0A14;
-			}
+			if (view == null || pos == null) return 0x0A0A14;
 
 			int color = BiomeColors.getAverageWaterColor(view, pos);
 
@@ -95,14 +115,5 @@ public class SimpleWeaponModClient implements ClientModInitializer {
 			return (r << 16) | (g << 8) | b;
 
 		}, Blocks.WATER);
-
 	}
-
-	private void showBiomeMessage(Minecraft client) {
-		client.player.displayClientMessage(
-				Component.literal("Central Yharnam"),
-				true // action bar
-		);
-	}
-
 }

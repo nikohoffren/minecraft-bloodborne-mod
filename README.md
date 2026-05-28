@@ -1,8 +1,8 @@
-# Simple Weapon (Fabric 1.21.1)
+# Bloodborne Mod (Fabric 1.21.1)
 
 
 
-A minimal Fabric mod that adds a custom sword-style weapon: **vesipullo**.
+A Fabric Bloodborne Mod
 
 
 
