@@ -17,7 +17,7 @@ public class FogRendererMixin {
             )
     )
     private static void modifyFogStart(Args args) {
-        args.set(0, 2.0F);
+        args.set(0, 4.0F);
     }
 
     @ModifyArgs(
@@ -28,7 +28,7 @@ public class FogRendererMixin {
             )
     )
     private static void modifyFogEnd(Args args) {
-        args.set(0, 18.0F);
+        args.set(0, 30.0F);
     }
 
 }
