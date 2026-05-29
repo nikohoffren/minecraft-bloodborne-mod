@@ -1,23 +1,23 @@
 {
 	"schemaVersion": 1,
-	"id": "simple_weapon",
+	"id": "bloodborne",
 	"version": "${version}",
-	"name": "Simple Weapon",
-	"description": "Adds a custom sword-style weapon for learning Fabric modding.",
+	"name": "Bloodborne",
+	"description": "A Fabric Bloodborne mod for Minecraft 1.21.1.",
 	"authors": [
 		"You"
 	],
 	"mixins": [
-		"simple_weapon.mixins.json"
+		"bloodborne.mixins.json"
 	],
 	"license": "CC0-1.0",
 	"environment": "*",
 	"entrypoints": {
 		"main": [
-			"dev.minecraftmods.simpleweapon.SimpleWeaponMod"
+			"dev.minecraftmods.bloodborne.BloodborneMod"
 		],
 		"client": [
-			"dev.minecraftmods.simpleweapon.SimpleWeaponModClient"
+			"dev.minecraftmods.bloodborne.BloodborneModClient"
 		]
 	},
 	"depends": {

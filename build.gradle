@@ -18,7 +18,7 @@ loom {
 	splitEnvironmentSourceSets()
 
 	mods {
-		"simple_weapon" {
+		"bloodborne" {
 			sourceSet sourceSets.main
 			sourceSet sourceSets.client
 		}
