@@ -2,6 +2,7 @@ package dev.minecraftmods.bloodborne;
 
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
+import net.fabricmc.fabric.api.client.networking.v1.ClientPlayConnectionEvents;
 import net.fabricmc.fabric.api.client.rendering.v1.ColorProviderRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback;
 import net.minecraft.client.renderer.BiomeColors;
@@ -13,10 +14,15 @@ public class BloodborneModClient implements ClientModInitializer {
 	private static int fadeTicks = 0;
 	private static boolean isFading = false;
 
-	private boolean hasStartedFade = false;
+	private boolean pendingWorldIntro = false;
+	private boolean titleShown = false;
 
 	@Override
 	public void onInitializeClient() {
+
+		ClientPlayConnectionEvents.JOIN.register((handler, sender, client) -> resetWorldIntro());
+
+		ClientPlayConnectionEvents.DISCONNECT.register((handler, client) -> resetWorldIntro());
 
 		HudRenderCallback.EVENT.register((drawContext, tickDelta) -> {
 			if (isFading) {
@@ -32,21 +38,21 @@ public class BloodborneModClient implements ClientModInitializer {
 
 		ClientTickEvents.END_CLIENT_TICK.register(client -> {
 
-			if (client.player == null || client.level == null) return;
+			if (client.player == null || client.level == null) {
+				return;
+			}
 
-			if (!hasStartedFade && client.player.tickCount > 20) {
+			if (pendingWorldIntro && client.player.tickCount > 20) {
 				startFade();
-				hasStartedFade = true;
+				pendingWorldIntro = false;
 			}
 
 			if (isFading) {
 				fadeTicks--;
 
-				if (fadeTicks == 20) {
-					client.gui.setTitle(
-							Component.literal("Central Yharnam")
-									.withStyle(style -> style.withBold(true))
-					);
+				if (!titleShown && fadeTicks == 20) {
+					showCentralYharnamTitle(client);
+					titleShown = true;
 				}
 
 				if (fadeTicks <= 0) {
@@ -58,9 +64,26 @@ public class BloodborneModClient implements ClientModInitializer {
 		registerColorProviders();
 	}
 
+	private void resetWorldIntro() {
+		pendingWorldIntro = true;
+		isFading = false;
+		fadeTicks = 0;
+		titleShown = false;
+	}
+
 	public static void startFade() {
 		isFading = true;
 		fadeTicks = 60;
+	}
+
+	private static void showCentralYharnamTitle(net.minecraft.client.Minecraft client) {
+		Component title = Component.literal("Central Yharnam")
+				.withStyle(style -> style.withBold(true));
+
+		client.gui.setTitle(title);
+		client.gui.setSubtitle(Component.empty());
+		// fade in (ticks), stay, fade out — ~3s total visible title
+		client.gui.setTimes(10, 50, 20);
 	}
 
 	private void registerColorProviders() {

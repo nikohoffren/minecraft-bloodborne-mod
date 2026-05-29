@@ -16,6 +16,7 @@ public class BloodborneMod implements ModInitializer {
 	public void onInitialize() {
 
 		ModItems.initialize();
+		ModMobSpawns.initialize();
 
 		ServerTickEvents.END_SERVER_TICK.register(server -> {
 
