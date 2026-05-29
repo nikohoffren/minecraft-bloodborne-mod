@@ -5,7 +5,8 @@
   "client": [
     "FogRendererMixin",
     "GuiMixin",
-    "client.SplashManagerMixin"
+    "client.SplashManagerMixin",
+    "client.LogoRendererMixin"
   ],
   "injectors": {
     "defaultRequire": 1

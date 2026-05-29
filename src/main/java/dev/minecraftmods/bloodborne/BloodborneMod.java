@@ -34,7 +34,7 @@ public class BloodborneMod implements ModInitializer {
 							.getRule(GameRules.RULE_DAYLIGHT)
 							.set(false, server);
 
-					level.setDayTime(13000);
+					level.setDayTime(13200);
 				}
 			}
 		});
