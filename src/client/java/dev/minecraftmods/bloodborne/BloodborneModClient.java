@@ -11,29 +11,43 @@ import net.minecraft.world.level.block.Blocks;
 
 public class BloodborneModClient implements ClientModInitializer {
 
+	/** Full black before the world fades in (~1.5 s). */
+	private static final int HOLD_BLACK_TICKS = 30;
+
+	/** Fade from black to clear (~3.5 s). */
+	private static final int FADE_OUT_TICKS = 70;
+
+	private static final int FADE_TOTAL_TICKS = HOLD_BLACK_TICKS + FADE_OUT_TICKS;
+
 	private static int fadeTicks = 0;
 	private static boolean isFading = false;
 
-	private boolean pendingWorldIntro = false;
 	private boolean titleShown = false;
 
 	@Override
 	public void onInitializeClient() {
 
-		ClientPlayConnectionEvents.JOIN.register((handler, sender, client) -> resetWorldIntro());
+		ClientPlayConnectionEvents.JOIN.register((handler, sender, client) -> beginWorldIntro());
 
-		ClientPlayConnectionEvents.DISCONNECT.register((handler, client) -> resetWorldIntro());
+		ClientPlayConnectionEvents.DISCONNECT.register((handler, client) -> endWorldIntro());
 
 		HudRenderCallback.EVENT.register((drawContext, tickDelta) -> {
-			if (isFading) {
-				drawContext.fill(
-						0,
-						0,
-						drawContext.guiWidth(),
-						drawContext.guiHeight(),
-						0xFF000000
-				);
+			if (!isFading || fadeTicks <= 0) {
+				return;
 			}
+
+			int alpha = getFadeOverlayAlpha();
+			if (alpha <= 0) {
+				return;
+			}
+
+			drawContext.fill(
+					0,
+					0,
+					drawContext.guiWidth(),
+					drawContext.guiHeight(),
+					(alpha << 24)
+			);
 		});
 
 		ClientTickEvents.END_CLIENT_TICK.register(client -> {
@@ -42,15 +56,10 @@ public class BloodborneModClient implements ClientModInitializer {
 				return;
 			}
 
-			if (pendingWorldIntro && client.player.tickCount > 20) {
-				startFade();
-				pendingWorldIntro = false;
-			}
-
 			if (isFading) {
 				fadeTicks--;
 
-				if (!titleShown && fadeTicks == 20) {
+				if (!titleShown && fadeTicks == FADE_OUT_TICKS) {
 					showCentralYharnamTitle(client);
 					titleShown = true;
 				}
@@ -64,8 +73,12 @@ public class BloodborneModClient implements ClientModInitializer {
 		registerColorProviders();
 	}
 
-	private void resetWorldIntro() {
-		pendingWorldIntro = true;
+	private void beginWorldIntro() {
+		titleShown = false;
+		startFade();
+	}
+
+	private void endWorldIntro() {
 		isFading = false;
 		fadeTicks = 0;
 		titleShown = false;
@@ -73,7 +86,16 @@ public class BloodborneModClient implements ClientModInitializer {
 
 	public static void startFade() {
 		isFading = true;
-		fadeTicks = 60;
+		fadeTicks = FADE_TOTAL_TICKS;
+	}
+
+	/** 255 = solid black, 0 = fully visible world. */
+	private static int getFadeOverlayAlpha() {
+		if (fadeTicks > FADE_OUT_TICKS) {
+			return 255;
+		}
+
+		return (int) (255.0f * fadeTicks / FADE_OUT_TICKS);
 	}
 
 	private static void showCentralYharnamTitle(net.minecraft.client.Minecraft client) {
