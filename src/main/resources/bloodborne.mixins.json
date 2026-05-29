@@ -3,7 +3,8 @@
   "package": "dev.minecraftmods.bloodborne.mixin",
   "compatibilityLevel": "JAVA_17",
   "client": [
-    "FogRendererMixin"
+    "FogRendererMixin",
+    "GuiMixin"
   ],
   "injectors": {
     "defaultRequire": 1

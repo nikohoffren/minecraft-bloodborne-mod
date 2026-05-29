@@ -59,6 +59,11 @@ public final class ModItems {
 			new HunterLanternItem(new Item.Properties().stacksTo(1))
 	);
 
+	public static final Item HUNTER_PISTOL = register(
+			"hunter_pistol",
+			new HunterPistolItem(new Item.Properties().stacksTo(1))
+	);
+
 	public static final Item HUNTER_HAT = register(
 			"hunter_hat",
 			new ArmorItem(ModArmorMaterials.HUNTER, ArmorItem.Type.HELMET, new Item.Properties())

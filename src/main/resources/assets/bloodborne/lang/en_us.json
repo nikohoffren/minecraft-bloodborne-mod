@@ -3,8 +3,14 @@
   "item.bloodborne.hunter_axe": "Hunter Axe",
   "item.bloodborne.threaded_cane": "Threaded Cane",
   "item.bloodborne.hunter_lantern": "Hunter's Lantern",
+  "item.bloodborne.hunter_pistol": "Hunter Pistol",
+  "item.bloodborne.hunter_pistol.desc": "Offhand firearm. Press G to fire.",
+  "item.bloodborne.hunter_pistol.ammo": "Quicksilver Bullets: %1$s / %2$s",
   "item.bloodborne.hunter_hat": "Hunter Hat",
   "item.bloodborne.hunter_garb": "Hunter Garb",
   "item.bloodborne.hunter_trousers": "Hunter Trousers",
-  "item.bloodborne.hunter_boots": "Hunter Boots"
+  "item.bloodborne.hunter_boots": "Hunter Boots",
+  "key.bloodborne.fire_pistol": "Fire Hunter Pistol",
+  "key.categories.bloodborne": "Bloodborne",
+  "hud.bloodborne.pistol_ammo": "Quicksilver Bullets: %s"
 }
