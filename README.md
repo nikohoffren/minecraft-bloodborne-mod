@@ -51,6 +51,21 @@ You can copy vanilla `leather_layer_1.png` / `leather_layer_2.png` as a starting
 
 Until PNGs exist, items show the purple missing-texture checkerboard.
 
+## Yharnam terrain (vanilla block look overrides)
+
+The mod replaces several **vanilla block models** under `assets/minecraft/models/block/` so existing worlds render cobblestone-style ground without swapping blocks in the world:
+
+| Block | Appearance |
+|-------|------------|
+| Grass block (incl. snowy) | Deepslate bricks |
+| Podzol, mycelium | Deepslate bricks |
+| Dirt path | Bricks on top/sides, cobbled deepslate below |
+| Short grass, tall grass, fern, large fern | Cobbled deepslate (small cross models) |
+
+Reload with **F3+T** after editing these JSON files. Blocks still behave as vanilla (e.g. grass still drops dirt); only rendering changes.
+
+To use custom art later, add PNGs under `assets/bloodborne/textures/block/` and point the model `textures` at `bloodborne:block/your_texture`.
+
 ## Custom weapon texture (legacy note)
 
 Put your texture in the **resources** tree (not in `src/main/java`). Minecraft item textures are **16×16 PNG** files.

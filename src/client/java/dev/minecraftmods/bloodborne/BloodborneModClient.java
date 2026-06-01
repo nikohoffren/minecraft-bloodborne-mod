@@ -113,19 +113,6 @@ public class BloodborneModClient implements ClientModInitializer {
 	private void registerColorProviders() {
 
 		ColorProviderRegistry.BLOCK.register((state, view, pos, tintIndex) -> {
-			if (view == null || pos == null) return 0x2F3B2F;
-
-			int color = BiomeColors.getAverageGrassColor(view, pos);
-
-			int r = (int)(((color >> 16) & 0xFF) * 0.5);
-			int g = (int)(((color >> 8) & 0xFF) * 0.4);
-			int b = (int)((color & 0xFF) * 0.4);
-
-			return (r << 16) | (g << 8) | b;
-
-		}, Blocks.GRASS_BLOCK);
-
-		ColorProviderRegistry.BLOCK.register((state, view, pos, tintIndex) -> {
 			if (view == null || pos == null) return 0x1F2A1F;
 
 			int color = BiomeColors.getAverageFoliageColor(view, pos);

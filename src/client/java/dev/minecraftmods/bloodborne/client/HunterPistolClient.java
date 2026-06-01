@@ -46,7 +46,10 @@ public final class HunterPistolClient {
 		}
 
 		if (ClientPlayNetworking.canSend(FirePistolPayload.TYPE)) {
-			ClientPlayNetworking.send(new FirePistolPayload());
+			ClientPlayNetworking.send(new FirePistolPayload(
+					client.player.getYRot(),
+					client.player.getXRot()
+			));
 		}
 	}
 

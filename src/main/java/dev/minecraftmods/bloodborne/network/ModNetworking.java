@@ -17,7 +17,7 @@ public final class ModNetworking {
 			context.server().execute(() -> {
 				ItemStack offhand = player.getOffhandItem();
 				if (offhand.is(ModItems.HUNTER_PISTOL)) {
-					HunterPistolItem.tryFire(player, offhand);
+					HunterPistolItem.tryFire(player, offhand, payload.yaw(), payload.pitch());
 				}
 			});
 		});
