@@ -55,6 +55,7 @@ public final class ModCreativeTabs {
 			entries.accept(ModItems.SAW_CLEAVER);
 			entries.accept(ModItems.HUNTER_AXE);
 			entries.accept(ModItems.THREADED_CANE);
+			entries.accept(ModItems.BLOOD_VIAL);
 			entries.accept(ModItems.HUNTER_LANTERN);
 			entries.accept(ModItems.HUNTER_PISTOL);
 			entries.accept(ModItems.HUNTER_HAT);

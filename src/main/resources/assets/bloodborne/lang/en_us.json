@@ -2,6 +2,8 @@
   "item.bloodborne.saw_cleaver": "Saw Cleaver",
   "item.bloodborne.hunter_axe": "Hunter Axe",
   "item.bloodborne.threaded_cane": "Threaded Cane",
+  "item.bloodborne.blood_vial": "Blood Vial",
+  "item.bloodborne.blood_vial.desc": "Restores 4 hearts. 2s cooldown.",
   "item.bloodborne.hunter_lantern": "Hunter's Lantern",
   "item.bloodborne.hunter_pistol": "Hunter Pistol",
   "item.bloodborne.hunter_pistol.desc": "Offhand firearm. Press G to fire.",

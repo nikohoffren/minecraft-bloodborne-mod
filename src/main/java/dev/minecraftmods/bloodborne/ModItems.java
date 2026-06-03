@@ -54,6 +54,11 @@ public final class ModItems {
 			)
 	);
 
+	public static final Item BLOOD_VIAL = register(
+			"blood_vial",
+			new BloodVialItem(new Item.Properties().stacksTo(20))
+	);
+
 	public static final Item HUNTER_LANTERN = register(
 			"hunter_lantern",
 			new HunterLanternItem(new Item.Properties().stacksTo(1))

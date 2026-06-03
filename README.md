@@ -7,6 +7,7 @@ A Fabric mod that brings Bloodborne-style hunting to Minecraft 1.21.1: trick wea
 | Category | Content |
 |----------|---------|
 | **Trick weapons** | Saw Cleaver, Hunter Axe, Threaded Cane (melee, tuned damage/speed) |
+| **Consumables** | Blood Vial — drink to heal 4 hearts (stack of 20, 2s cooldown) |
 | **Firearm** | Hunter Pistol (offhand, **G** to fire, ammo bar) |
 | **Gear** | Hunter armor set (4 pieces), Hunter's Lantern |
 | **Atmosphere** | Permanent night; dark foliage and water; join fade + "Central Yharnam" title |
@@ -60,6 +61,7 @@ Open inventory (**E**) → **Combat** tab. Bloodborne weapons, pistol, lantern, 
 /give @s bloodborne:saw_cleaver
 /give @s bloodborne:hunter_axe
 /give @s bloodborne:threaded_cane
+/give @s bloodborne:blood_vial
 /give @s bloodborne:hunter_pistol
 /give @s bloodborne:hunter_lantern
 /give @s bloodborne:hunter_hat
@@ -69,6 +71,14 @@ Open inventory (**E**) → **Combat** tab. Bloodborne weapons, pistol, lantern, 
 ```
 
 Enable cheats in single-player, or use a server/world that allows commands.
+
+### Blood Vial
+
+- **Right-click and hold** to drink (same animation as a potion).
+- Restores **4 hearts** (8 HP), up to your max health.
+- **Stack size 20**; **2 second** cooldown between uses.
+- Cannot be used at full health.
+- Tune in `BloodVialItem.java`: `HEAL_AMOUNT`, `COOLDOWN_TICKS`, `USE_DURATION_TICKS`.
 
 ### Hunter Pistol
 
@@ -188,6 +198,7 @@ Put PNGs under `src/main/resources/assets/bloodborne/`. Reload with **F3+T** aft
 | Saw Cleaver | `textures/item/saw_cleaver.png` |
 | Hunter Axe | `textures/item/hunter_axe.png` |
 | Threaded Cane | `textures/item/threaded_cane.png` |
+| Blood Vial | `textures/item/blood_vial.png` |
 | Hunter Pistol | `textures/item/hunter_pistol.png` |
 | Hunter's Lantern | `textures/item/hunter_lantern.png` |
 
