@@ -6,7 +6,7 @@ import net.minecraft.world.phys.Vec3;
 
 /**
  * Central Yharnam — Cleric Beast arena (Warden placeholder).
- * Fog walls can be added later at the horizontal bounds.
+ * Fog wall at the arena entrance uses nether portal blocks (see FogWallConfig).
  */
 public final class ClericBeastBossConfig {
 

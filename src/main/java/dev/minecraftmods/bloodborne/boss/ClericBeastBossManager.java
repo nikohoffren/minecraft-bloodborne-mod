@@ -69,6 +69,7 @@ public final class ClericBeastBossManager {
 		BloodborneBossSaveData save = BloodborneBossSaveData.get(level);
 
 		if (save.isClericBeastDefeated()) {
+			FogWallManager.deactivate(level);
 			bossEvent.removeAllPlayers();
 			bossEvent.setVisible(false);
 			trackedWardenId = null;
@@ -78,6 +79,7 @@ public final class ClericBeastBossManager {
 		Warden warden = findTrackedOrNearbyWarden(level);
 
 		if (warden == null) {
+			FogWallManager.deactivate(level);
 			bossEvent.removeAllPlayers();
 			bossEvent.setVisible(false);
 			trackedWardenId = null;
@@ -86,12 +88,22 @@ public final class ClericBeastBossManager {
 		}
 
 		trackedWardenId = warden.getUUID();
+		FogWallManager.activate(level);
+		FogWallManager.enforceBlocking(level);
+		deduplicateClericBeasts(level, warden);
 		constrainToArena(warden);
+		keepBossAngry(warden, level);
 		updateBossBar(level, warden);
 	}
 
 	private void trySpawn(ServerLevel level, BloodborneBossSaveData save) {
 		if (save.isClericBeastDefeated()) {
+			return;
+		}
+
+		Warden existing = findAnyTaggedClericBeast(level);
+		if (existing != null) {
+			trackedWardenId = existing.getUUID();
 			return;
 		}
 
@@ -120,6 +132,7 @@ public final class ClericBeastBossManager {
 		warden.setPersistenceRequired();
 
 		level.addFreshEntity(warden);
+		keepBossAngry(warden, level);
 		trackedWardenId = warden.getUUID();
 
 		BloodborneMod.LOGGER.info("Spawned Cleric Beast (Warden) at {}", spawn);
@@ -157,6 +170,37 @@ public final class ClericBeastBossManager {
 		warden.setDeltaMovement(Vec3.ZERO);
 	}
 
+	private static Warden findAnyTaggedClericBeast(ServerLevel level) {
+		List<Warden> tagged = level.getEntities(
+				EntityType.WARDEN,
+				ClericBeastBossConfig.arenaBounds().inflate(32.0D),
+				entity -> entity.getTags().contains(ClericBeastBossConfig.ENTITY_TAG) && entity.isAlive()
+		);
+
+		return tagged.isEmpty() ? null : tagged.getFirst();
+	}
+
+	private static void deduplicateClericBeasts(ServerLevel level, Warden keeper) {
+		for (Warden other : level.getEntities(
+				EntityType.WARDEN,
+				ClericBeastBossConfig.arenaBounds().inflate(32.0D),
+				entity -> entity.getTags().contains(ClericBeastBossConfig.ENTITY_TAG) && entity.isAlive()
+		)) {
+			if (other != keeper) {
+				other.discard();
+			}
+		}
+	}
+
+	/** Wardens dig when calm; keep the boss angry while hunters are in the arena. */
+	private static void keepBossAngry(Warden warden, ServerLevel level) {
+		for (ServerPlayer player : level.players()) {
+			if (player.isAlive() && ClericBeastBossConfig.isInsideArena(player.position())) {
+				warden.increaseAngerAt(player, 10, false);
+			}
+		}
+	}
+
 	private void updateBossBar(ServerLevel level, Warden warden) {
 		float progress = warden.getHealth() / warden.getMaxHealth();
 		bossEvent.setProgress(Math.max(0.0F, Math.min(1.0F, progress)));
@@ -172,6 +216,7 @@ public final class ClericBeastBossManager {
 	}
 
 	private void onBossDefeated(ServerLevel level) {
+		FogWallManager.deactivate(level);
 		BloodborneBossSaveData save = BloodborneBossSaveData.get(level);
 		save.setClericBeastDefeated(true);
 		trackedWardenId = null;
@@ -184,6 +229,7 @@ public final class ClericBeastBossManager {
 
 	/** For commands / debugging — allows the boss to spawn again. */
 	public static void resetClericBeast(ServerLevel level) {
+		FogWallManager.deactivate(level);
 		BloodborneBossSaveData save = BloodborneBossSaveData.get(level);
 		save.setClericBeastDefeated(false);
 

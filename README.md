@@ -342,7 +342,8 @@ The boss spawns automatically when that chunk is loaded and the boss has not bee
 ### Behaviour
 
 - **Boss bar:** “Cleric Beast” (red, notched) for players inside the arena
-- **Arena leash:** If the Warden leaves the arena, it is teleported back to the spawn point (fog walls can replace this later)
+- **Fog wall:** Nether-portal sheet at doorway **(-91,-60,10)** to **(-86,-56,10)** — visible and impassable while the boss lives; removed when defeated
+- **Arena leash:** If the Warden leaves the arena, it is teleported back to the spawn point
 - **Boss music:** Plays when you are in the arena and the boss is alive (add `sounds/music/boss/cleric_beast.ogg`)
 - **Defeat:** After kill, the boss does not respawn (saved per world)
 
@@ -363,9 +364,21 @@ Edit `ClericBeastBossConfig.java`:
 - `ARENA_HORIZONTAL_RADIUS`
 - `ARENA_VERTICAL_HALF`
 
+### Fog wall
+
+| Setting | Value |
+|---------|--------|
+| Corner 1 | -91, -60, 10 |
+| Corner 2 | -86, -56, 10 |
+| Look | Vanilla **nether portal** blocks (animated sheet) |
+| When active | While Cleric Beast is **alive** |
+| Passage | **Blocked** both ways for now (one-way entry later) |
+
+Tune in `FogWallConfig.java`. Original blocks in that frame are restored when the boss dies.
+
 ### Later
 
-- Fog walls at arena exits
+- One-way fog (enter arena, cannot leave until boss dies)
 - Custom Cleric Beast model/texture instead of Warden
 - More bosses in other “boss rooms”
 
