@@ -1,0 +1,18 @@
+{
+  "music.menu.main_theme": {
+    "sounds": [
+      {
+        "name": "bloodborne:music/menu/main_theme",
+        "stream": true
+      }
+    ]
+  },
+  "music.boss.cleric_beast": {
+    "sounds": [
+      {
+        "name": "bloodborne:music/boss/cleric_beast",
+        "stream": true
+      }
+    ]
+  }
+}

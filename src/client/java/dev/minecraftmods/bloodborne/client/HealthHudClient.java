@@ -4,7 +4,6 @@ import dev.minecraftmods.bloodborne.ModItems;
 import dev.minecraftmods.bloodborne.stamina.StaminaHandler;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -108,10 +107,9 @@ public final class HealthHudClient {
 			return;
 		}
 
-		Component label = Component.translatable("hud.bloodborne.blood_vials", count);
 		int panelY = staminaBarY() + BAR_HEIGHT + VIAL_LABEL_GAP;
 		ItemStack iconStack = new ItemStack(ModItems.BLOOD_VIAL);
 
-		HudLabelRenderer.drawBoxedItemWithLabel(graphics, BAR_X, panelY, iconStack, label, 0xFFCC4444);
+		HudLabelRenderer.drawBoxedItemWithCount(graphics, BAR_X, panelY, iconStack, count, 0xFFCC4444);
 	}
 }

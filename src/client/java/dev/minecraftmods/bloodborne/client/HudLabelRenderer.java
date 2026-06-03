@@ -68,4 +68,32 @@ public final class HudLabelRenderer {
 		int x = centerX - panelWidth / 2;
 		drawBoxedItemWithLabel(graphics, x, y, iconStack, label, textColor);
 	}
+
+	/** Item icon with numeric count only (no prefix text). */
+	public static void drawBoxedItemWithCount(
+			GuiGraphics graphics,
+			int x,
+			int y,
+			ItemStack iconStack,
+			int count,
+			int textColor
+	) {
+		drawBoxedItemWithLabel(graphics, x, y, iconStack, Component.literal(String.valueOf(count)), textColor);
+	}
+
+	public static void drawBoxedItemWithCountCentered(
+			GuiGraphics graphics,
+			int centerX,
+			int y,
+			ItemStack iconStack,
+			int count,
+			int textColor
+	) {
+		Minecraft client = Minecraft.getInstance();
+		String countText = String.valueOf(count);
+		int textWidth = client.font.width(countText);
+		int panelWidth = ICON_SIZE + ICON_TEXT_GAP + textWidth;
+		int x = centerX - panelWidth / 2;
+		drawBoxedItemWithCount(graphics, x, y, iconStack, count, textColor);
+	}
 }

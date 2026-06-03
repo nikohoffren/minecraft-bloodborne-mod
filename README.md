@@ -12,6 +12,8 @@ A Fabric mod that brings Bloodborne-style hunting to Minecraft 1.21.1: trick wea
 | **Firearm** | Hunter Pistol (offhand, **G** to fire, ammo bar) |
 | **Gear** | Hunter armor set (4 pieces), Hunter's Lantern |
 | **Atmosphere** | Permanent night; dark foliage and water; join fade + "Central Yharnam" title |
+| **Music** | Vanilla music disabled; Bloodborne main theme on title screen; silent overworld; boss theme in arenas |
+| **Boss** | Cleric Beast (Warden) at Central Yharnam coords — boss bar, arena leash, one-time spawn per world |
 | **World look** | Grass and related blocks render as deepslate-style cobble/brick (no block replacement in the world) |
 | **Mobs** | Slimes are removed |
 | **Creative** | Vanilla swords and armor hidden from Combat tab; Bloodborne items added instead |
@@ -86,7 +88,7 @@ Enable cheats in single-player, or use a server/world that allows commands.
 - In **survival, adventure, and creative** (not spectator), **vanilla hearts, hunger, armor bar, and XP bar** are hidden. Custom health/stamina/vial HUD draws with the hotbar (so it appears in creative too).
 - A **compact boss-style health bar** is drawn at the **top-left** (110×4 px, red fill).
 - **Stamina bar** directly below health (same size, green fill). Drains while sprinting and on melee attacks / pistol shots; regens after a short delay when idle.
-- **Blood vials:** item icon + count in a dark box under the stamina bar. When a vial is in the **offhand**, the same icon+label panel appears above the offhand slot (pistol ammo uses the same layout).
+- **Blood vials:** item icon + number in a dark box under the stamina bar (e.g. `[vial] 12`). When a vial is in the **offhand**, the same panel appears above the offhand slot.
 - Tune stamina in `StaminaHandler.java` (`MAX_STAMINA`, `REGEN_PER_TICK`, `SPRINT_DRAIN_PER_TICK`, `ATTACK_COST`, `PISTOL_COST`).
 - Mount health (when riding) stays vanilla. You still gain XP; only the bar is hidden.
 - Client code: `HealthHudClient`, `BloodVialHudClient`, `HudLabelRenderer`, `GuiMixin`.
@@ -272,6 +274,100 @@ Output: `build/libs/bloodborne-mod-1.0.0.jar` (version from `gradle.properties`)
 | `src/client/java/.../mixin/GuiMixin.java` | HUD mixins (health bar, pistol ammo) |
 | `src/main/resources/assets/bloodborne/` | Textures, models, items, lang |
 | `src/main/resources/assets/minecraft/` | Vanilla overrides (terrain, splashes) |
+
+---
+
+## Music (Bloodborne tracks)
+
+Minecraft only plays **`.ogg`** (Vorbis) files, not MP3. Convert your tracks first (see folder READMEs).
+
+### Title screen
+
+Put the main theme here:
+
+```text
+src/main/resources/assets/bloodborne/sounds/music/menu/main_theme.ogg
+```
+
+It plays on the **Bloodcraft** title screen. Vanilla menu music is blocked.
+
+**Convert MP3 → OGG (example):**
+
+```bat
+ffmpeg -i "main_theme.mp3" -c:a libvorbis -q:a 4 main_theme.ogg
+```
+
+### In-game (overworld)
+
+No background music — same idea as exploring Yharnam. Vanilla biome/creative music is blocked.
+
+### Boss music (later)
+
+Reserved path for Cleric Beast (e.g. Warden retexture + boss bar):
+
+```text
+src/main/resources/assets/bloodborne/sounds/music/boss/cleric_beast.ogg
+```
+
+Registered as `bloodborne:music.boss.cleric_beast`. When boss fights exist, call from code:
+
+- `BloodborneMusicClient.startBossMusic(client)`
+- `BloodborneMusicClient.stopBossMusic(client)`
+
+### Sound IDs
+
+| Track | Registry id |
+|-------|-------------|
+| Main menu | `bloodborne:music.menu.main_theme` |
+| Cleric Beast (future) | `bloodborne:music.boss.cleric_beast` |
+
+After adding or changing `.ogg` files, restart the client (F3+T is not enough for new sound files).
+
+---
+
+## Cleric Beast boss (Central Yharnam)
+
+The **Cleric Beast** is a Warden with a custom name and boss bar (visual swap can come later). It is meant for your **overworld** Central Yharnam build.
+
+### Spawn location
+
+| Setting | Value |
+|---------|--------|
+| Block position | **-91, -60, -15** |
+| Dimension | Overworld |
+| Arena radius | **28** blocks horizontal, **14** blocks vertical |
+
+The boss spawns automatically when that chunk is loaded and the boss has not been defeated yet.
+
+### Behaviour
+
+- **Boss bar:** “Cleric Beast” (red, notched) for players inside the arena
+- **Arena leash:** If the Warden leaves the arena, it is teleported back to the spawn point (fog walls can replace this later)
+- **Boss music:** Plays when you are in the arena and the boss is alive (add `sounds/music/boss/cleric_beast.ogg`)
+- **Defeat:** After kill, the boss does not respawn (saved per world)
+
+### Commands (OP / cheats)
+
+```mcfunction
+/bloodborne cleric_beast info
+/bloodborne cleric_beast reset
+```
+
+`reset` clears the defeated flag and removes the old boss so it can spawn again at the coords above.
+
+### Tuning coords / arena size
+
+Edit `ClericBeastBossConfig.java`:
+
+- `SPAWN_BLOCK_POS`
+- `ARENA_HORIZONTAL_RADIUS`
+- `ARENA_VERTICAL_HALF`
+
+### Later
+
+- Fog walls at arena exits
+- Custom Cleric Beast model/texture instead of Warden
+- More bosses in other “boss rooms”
 
 ---
 

@@ -3,7 +3,6 @@ package dev.minecraftmods.bloodborne.client;
 import dev.minecraftmods.bloodborne.ModItems;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 
@@ -45,8 +44,7 @@ public final class BloodVialHudClient {
 			return;
 		}
 
-		Component label = Component.translatable("hud.bloodborne.blood_vials", offhand.getCount());
-
+		int count = offhand.getCount();
 		int screenWidth = graphics.guiWidth();
 		int screenHeight = graphics.guiHeight();
 
@@ -56,6 +54,6 @@ public final class BloodVialHudClient {
 		// Panel above offhand slot: icon + count (vanilla still draws the item in the slot below)
 		int panelY = offhandSlotY - 36;
 
-		HudLabelRenderer.drawBoxedItemWithLabelCentered(graphics, centerX, panelY, offhand, label, 0xFFCC4444);
+		HudLabelRenderer.drawBoxedItemWithCountCentered(graphics, centerX, panelY, offhand, count, 0xFFCC4444);
 	}
 }

@@ -1,5 +1,7 @@
 package dev.minecraftmods.bloodborne;
 
+import dev.minecraftmods.bloodborne.boss.ClericBeastBossManager;
+import dev.minecraftmods.bloodborne.command.BloodborneCommands;
 import dev.minecraftmods.bloodborne.network.ModNetworking;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
@@ -22,8 +24,11 @@ public class BloodborneMod implements ModInitializer {
 	public void onInitialize() {
 
 		ModItems.initialize();
+		ModSounds.initialize();
 		ModMobSpawns.initialize();
 		ModNetworking.register();
+		ClericBeastBossManager.register();
+		BloodborneCommands.register();
 
 		ServerTickEvents.END_SERVER_TICK.register(server -> {
 

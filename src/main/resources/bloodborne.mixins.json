@@ -9,7 +9,8 @@
     "FogRendererMixin",
     "GuiMixin",
     "client.SplashManagerMixin",
-    "client.LogoRendererMixin"
+    "client.LogoRendererMixin",
+    "client.MusicManagerMixin"
   ],
   "injectors": {
     "defaultRequire": 1
