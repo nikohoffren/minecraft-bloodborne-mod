@@ -49,6 +49,35 @@ public class GuiMixin {
 		}
 	}
 
+	@Inject(method = "renderArmor", at = @At("HEAD"), cancellable = true)
+	private static void bloodborne$hideArmor(
+			GuiGraphics guiGraphics,
+			Player player,
+			int x,
+			int y,
+			int height,
+			int heartRows,
+			CallbackInfo ci
+	) {
+		if (HealthHudClient.shouldReplaceHearts(player)) {
+			ci.cancel();
+		}
+	}
+
+	@Inject(method = "renderExperienceBar", at = @At("HEAD"), cancellable = true)
+	private void bloodborne$hideExperienceBar(GuiGraphics guiGraphics, int x, CallbackInfo ci) {
+		if (minecraft.player != null && HealthHudClient.shouldReplaceHearts(minecraft.player)) {
+			ci.cancel();
+		}
+	}
+
+	@Inject(method = "renderExperienceLevel", at = @At("HEAD"), cancellable = true)
+	private void bloodborne$hideExperienceLevel(GuiGraphics guiGraphics, DeltaTracker deltaTracker, CallbackInfo ci) {
+		if (minecraft.player != null && HealthHudClient.shouldReplaceHearts(minecraft.player)) {
+			ci.cancel();
+		}
+	}
+
 	@Inject(method = "renderPlayerHealth", at = @At("RETURN"))
 	private void bloodborne$renderHealthHud(GuiGraphics guiGraphics, CallbackInfo ci) {
 		if (minecraft.player != null && HealthHudClient.shouldReplaceHearts(minecraft.player)) {

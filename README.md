@@ -83,10 +83,10 @@ Enable cheats in single-player, or use a server/world that allows commands.
 
 ### Health bar (boss-style)
 
-- In survival/adventure/creative (not spectator), **vanilla hearts and hunger are hidden**.
+- In survival/adventure/creative (not spectator), **vanilla hearts, hunger, armor bar, and XP bar** are hidden (including the level number above the bar).
 - A **compact boss-style health bar** is drawn at the **top-left** (110×4 px, red fill).
 - **Blood vials:** item icon + count in a dark box under the health bar. When a vial is in the **offhand**, the same icon+label panel appears above the offhand slot (pistol ammo uses the same layout).
-- Armor icons and mount health stay vanilla.
+- Mount health (when riding) stays vanilla. You still gain XP; only the bar is hidden.
 - Client code: `HealthHudClient`, `BloodVialHudClient`, `HudLabelRenderer`, `GuiMixin`.
 
 ### Hunter Pistol
