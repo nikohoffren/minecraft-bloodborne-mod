@@ -1,5 +1,6 @@
 package dev.minecraftmods.bloodborne.mixin;
 
+import dev.minecraftmods.bloodborne.client.BloodVialHudClient;
 import dev.minecraftmods.bloodborne.client.HealthHudClient;
 import dev.minecraftmods.bloodborne.client.HunterPistolClient;
 import net.minecraft.client.DeltaTracker;
@@ -41,15 +42,23 @@ public class GuiMixin {
 		}
 	}
 
+	@Inject(method = "renderFood", at = @At("HEAD"), cancellable = true)
+	private void bloodborne$hideHunger(GuiGraphics guiGraphics, Player player, int x, int y, CallbackInfo ci) {
+		if (HealthHudClient.shouldReplaceHearts(player)) {
+			ci.cancel();
+		}
+	}
+
 	@Inject(method = "renderPlayerHealth", at = @At("RETURN"))
-	private void bloodborne$renderBossHealthBar(GuiGraphics guiGraphics, CallbackInfo ci) {
+	private void bloodborne$renderHealthHud(GuiGraphics guiGraphics, CallbackInfo ci) {
 		if (minecraft.player != null && HealthHudClient.shouldReplaceHearts(minecraft.player)) {
-			HealthHudClient.renderBossHealthBar(guiGraphics);
+			HealthHudClient.renderHud(guiGraphics);
 		}
 	}
 
 	@Inject(method = "renderItemHotbar", at = @At("RETURN"))
-	private void bloodborne$renderPistolAmmoHud(GuiGraphics guiGraphics, DeltaTracker deltaTracker, CallbackInfo ci) {
+	private void bloodborne$renderOffhandHud(GuiGraphics guiGraphics, DeltaTracker deltaTracker, CallbackInfo ci) {
 		HunterPistolClient.renderAmmoHud(guiGraphics);
+		BloodVialHudClient.renderOffhandHud(guiGraphics);
 	}
 }

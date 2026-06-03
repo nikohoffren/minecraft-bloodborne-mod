@@ -14,5 +14,6 @@
   "item.bloodborne.hunter_boots": "Hunter Boots",
   "key.bloodborne.fire_pistol": "Fire Hunter Pistol",
   "key.categories.bloodborne": "Bloodborne",
-  "hud.bloodborne.pistol_ammo": "Quicksilver Bullets: %s"
+  "hud.bloodborne.pistol_ammo": "Quicksilver Bullets: %s",
+  "hud.bloodborne.blood_vials": "Blood Vials: %s"
 }

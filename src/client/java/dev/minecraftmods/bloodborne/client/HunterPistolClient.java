@@ -67,28 +67,16 @@ public final class HunterPistolClient {
 
 		int ammo = HunterPistolItem.getAmmo(offhand);
 		Component label = Component.translatable("hud.bloodborne.pistol_ammo", ammo);
-		int labelWidth = client.font.width(label);
 
-		int screenWidth = client.getWindow().getGuiScaledWidth();
-		int screenHeight = client.getWindow().getGuiScaledHeight();
+		int screenWidth = context.guiWidth();
+		int screenHeight = context.guiHeight();
 
 		// Vanilla offhand slot: left of hotbar, 16x16 at y = screenHeight - 16
 		int offhandSlotX = screenWidth / 2 - 91 - OFFHAND_SLOT_X_OFFSET;
 		int offhandSlotY = screenHeight - 16;
-
-		// Draw above the offhand icon, centered on the slot
-		int textX = offhandSlotX + 8 - labelWidth / 2;
-		int textY = offhandSlotY - 20;
-
-		int padding = 2;
-		context.fill(
-				textX - padding,
-				textY - padding,
-				textX + labelWidth + padding,
-				textY + client.font.lineHeight + padding,
-				0xC0000000
-		);
-		context.drawString(client.font, label, textX, textY, 0xFFFFFF, false);
+		int centerX = offhandSlotX + 8;
+		int panelY = offhandSlotY - 36;
+		HudLabelRenderer.drawBoxedItemWithLabelCentered(context, centerX, panelY, offhand, label, 0xFFFFFF);
 	}
 
 	private HunterPistolClient() {
