@@ -15,7 +15,7 @@ A Fabric mod that brings Bloodborne-style hunting to Minecraft 1.21.1: trick wea
 | **Music** | Vanilla music disabled; Bloodborne main theme on title screen; silent overworld; boss theme in arenas |
 | **Boss** | Cleric Beast (Warden) at Central Yharnam coords — boss bar, arena leash, one-time spawn per world |
 | **World look** | Grass and related blocks render as deepslate-style cobble/brick (no block replacement in the world) |
-| **Mobs** | Slimes are removed |
+| **Mobs** | Vanilla hostiles disabled (slimes, undead, creepers, spiders, illagers, etc.) — Cleric Beast still spawns |
 | **Creative** | Vanilla swords and armor hidden from Combat tab; Bloodborne items added instead |
 
 ---
