@@ -8,6 +8,7 @@ A Fabric mod that brings Bloodborne-style hunting to Minecraft 1.21.1: trick wea
 |----------|---------|
 | **Trick weapons** | Saw Cleaver, Hunter Axe, Threaded Cane (melee, tuned damage/speed) |
 | **Consumables** | Blood Vial — drink to heal 4 hearts (stack of 20, 2s cooldown) |
+| **HUD** | Boss-style health bar (replaces heart row); pistol ammo label when offhand equipped |
 | **Firearm** | Hunter Pistol (offhand, **G** to fire, ammo bar) |
 | **Gear** | Hunter armor set (4 pieces), Hunter's Lantern |
 | **Atmosphere** | Permanent night; dark foliage and water; join fade + "Central Yharnam" title |
@@ -79,6 +80,14 @@ Enable cheats in single-player, or use a server/world that allows commands.
 - **Stack size 20**; **2 second** cooldown between uses.
 - Cannot be used at full health.
 - Tune in `BloodVialItem.java`: `HEAL_AMOUNT`, `COOLDOWN_TICKS`, `USE_DURATION_TICKS`.
+
+### Health bar (boss-style)
+
+- In survival/adventure/creative (not spectator), **vanilla hearts are hidden**.
+- A **boss-bar-style meter** is drawn at the top center (same sprites as Wither/Ender Dragon).
+- Fill includes **absorption** (golden hearts) in the bar width.
+- Armor icons, hunger, and mount health stay vanilla.
+- Client code: `HealthHudClient.java`, `GuiMixin.java` (cancels `renderHearts`, draws bar after `renderPlayerHealth`).
 
 ### Hunter Pistol
 
@@ -256,7 +265,9 @@ Output: `build/libs/bloodborne-mod-1.0.0.jar` (version from `gradle.properties`)
 | `src/main/java/.../ModItems.java` | Registers items |
 | `src/main/java/.../ModCreativeTabs.java` | Creative inventory entries |
 | `src/main/java/.../BloodborneMod.java` | Server init (night, networking, etc.) |
-| `src/client/java/.../BloodborneModClient.java` | Client intro, colors, HUD |
+| `src/client/java/.../BloodborneModClient.java` | Client intro, colors |
+| `src/client/java/.../client/HealthHudClient.java` | Boss-style player health bar |
+| `src/client/java/.../mixin/GuiMixin.java` | HUD mixins (health bar, pistol ammo) |
 | `src/main/resources/assets/bloodborne/` | Textures, models, items, lang |
 | `src/main/resources/assets/minecraft/` | Vanilla overrides (terrain, splashes) |
 
