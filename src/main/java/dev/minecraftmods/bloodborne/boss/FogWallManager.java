@@ -22,16 +22,16 @@ public final class FogWallManager {
 		return wallActive;
 	}
 
-	public static boolean isFogWallBlock(BlockPos pos) {
-		if (!wallActive) {
-			return false;
-		}
-
+	public static boolean isInFogWallRegion(BlockPos pos) {
 		return pos.getX() >= FogWallConfig.MIN_X
 				&& pos.getX() <= FogWallConfig.MAX_X
 				&& pos.getY() >= FogWallConfig.MIN_Y
 				&& pos.getY() <= FogWallConfig.MAX_Y
 				&& pos.getZ() == FogWallConfig.PLANE_Z;
+	}
+
+	public static boolean isFogWallBlock(BlockPos pos) {
+		return wallActive && isInFogWallRegion(pos);
 	}
 
 	public static void activate(ServerLevel level) {
@@ -94,7 +94,6 @@ public final class FogWallManager {
 		}
 
 		double planeZ = FogWallConfig.PLANE_Z;
-		/** Push far enough that the player bbox no longer crosses the portal plane. */
 		double pushMargin = 1.25D;
 
 		for (ServerPlayer player : level.players()) {
