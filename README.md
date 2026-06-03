@@ -8,7 +8,7 @@ A Fabric mod that brings Bloodborne-style hunting to Minecraft 1.21.1: trick wea
 |----------|---------|
 | **Trick weapons** | Saw Cleaver, Hunter Axe, Threaded Cane (melee, tuned damage/speed) |
 | **Consumables** | Blood Vial — drink to heal 4 hearts (stack of 20, 2s cooldown) |
-| **HUD** | Boss-style health bar (replaces heart row); pistol ammo label when offhand equipped |
+| **HUD** | Boss-style health + stamina bars (top-left); blood vial count; pistol ammo when offhand equipped |
 | **Firearm** | Hunter Pistol (offhand, **G** to fire, ammo bar) |
 | **Gear** | Hunter armor set (4 pieces), Hunter's Lantern |
 | **Atmosphere** | Permanent night; dark foliage and water; join fade + "Central Yharnam" title |
@@ -83,9 +83,11 @@ Enable cheats in single-player, or use a server/world that allows commands.
 
 ### Health bar (boss-style)
 
-- In survival/adventure/creative (not spectator), **vanilla hearts, hunger, armor bar, and XP bar** are hidden (including the level number above the bar).
+- In **survival, adventure, and creative** (not spectator), **vanilla hearts, hunger, armor bar, and XP bar** are hidden. Custom health/stamina/vial HUD draws with the hotbar (so it appears in creative too).
 - A **compact boss-style health bar** is drawn at the **top-left** (110×4 px, red fill).
-- **Blood vials:** item icon + count in a dark box under the health bar. When a vial is in the **offhand**, the same icon+label panel appears above the offhand slot (pistol ammo uses the same layout).
+- **Stamina bar** directly below health (same size, green fill). Drains while sprinting and on melee attacks / pistol shots; regens after a short delay when idle.
+- **Blood vials:** item icon + count in a dark box under the stamina bar. When a vial is in the **offhand**, the same icon+label panel appears above the offhand slot (pistol ammo uses the same layout).
+- Tune stamina in `StaminaHandler.java` (`MAX_STAMINA`, `REGEN_PER_TICK`, `SPRINT_DRAIN_PER_TICK`, `ATTACK_COST`, `PISTOL_COST`).
 - Mount health (when riding) stays vanilla. You still gain XP; only the bar is hidden.
 - Client code: `HealthHudClient`, `BloodVialHudClient`, `HudLabelRenderer`, `GuiMixin`.
 

@@ -1,5 +1,6 @@
 package dev.minecraftmods.bloodborne;
 
+import dev.minecraftmods.bloodborne.stamina.StaminaHandler;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.sounds.SoundEvents;
@@ -81,6 +82,19 @@ public class HunterPistolItem extends Item {
 					SoundSource.PLAYERS,
 					0.6F,
 					1.2F
+			);
+			return;
+		}
+
+		if (!player.isCreative()
+				&& !StaminaHandler.tryConsume(player, StaminaHandler.PISTOL_COST, StaminaHandler.REGEN_DELAY_TICKS)) {
+			player.level().playSound(
+					null,
+					player.blockPosition(),
+					SoundEvents.DISPENSER_FAIL,
+					SoundSource.PLAYERS,
+					0.6F,
+					0.8F
 			);
 			return;
 		}

@@ -37,14 +37,14 @@ public class GuiMixin {
 			boolean blinking,
 			CallbackInfo ci
 	) {
-		if (HealthHudClient.shouldReplaceHearts(player)) {
+		if (HealthHudClient.shouldUseBloodborneHud(player)) {
 			ci.cancel();
 		}
 	}
 
 	@Inject(method = "renderFood", at = @At("HEAD"), cancellable = true)
 	private void bloodborne$hideHunger(GuiGraphics guiGraphics, Player player, int x, int y, CallbackInfo ci) {
-		if (HealthHudClient.shouldReplaceHearts(player)) {
+		if (HealthHudClient.shouldUseBloodborneHud(player)) {
 			ci.cancel();
 		}
 	}
@@ -59,34 +59,35 @@ public class GuiMixin {
 			int heartRows,
 			CallbackInfo ci
 	) {
-		if (HealthHudClient.shouldReplaceHearts(player)) {
+		if (HealthHudClient.shouldUseBloodborneHud(player)) {
 			ci.cancel();
 		}
 	}
 
 	@Inject(method = "renderExperienceBar", at = @At("HEAD"), cancellable = true)
 	private void bloodborne$hideExperienceBar(GuiGraphics guiGraphics, int x, CallbackInfo ci) {
-		if (minecraft.player != null && HealthHudClient.shouldReplaceHearts(minecraft.player)) {
+		if (minecraft.player != null && HealthHudClient.shouldUseBloodborneHud(minecraft.player)) {
 			ci.cancel();
 		}
 	}
 
 	@Inject(method = "renderExperienceLevel", at = @At("HEAD"), cancellable = true)
 	private void bloodborne$hideExperienceLevel(GuiGraphics guiGraphics, DeltaTracker deltaTracker, CallbackInfo ci) {
-		if (minecraft.player != null && HealthHudClient.shouldReplaceHearts(minecraft.player)) {
+		if (minecraft.player != null && HealthHudClient.shouldUseBloodborneHud(minecraft.player)) {
 			ci.cancel();
 		}
 	}
 
-	@Inject(method = "renderPlayerHealth", at = @At("RETURN"))
-	private void bloodborne$renderHealthHud(GuiGraphics guiGraphics, CallbackInfo ci) {
-		if (minecraft.player != null && HealthHudClient.shouldReplaceHearts(minecraft.player)) {
+	/**
+	 * Renders after the hotbar so health/stamina/vials show in survival and creative
+	 * (creative often skips {@code renderPlayerHealth}).
+	 */
+	@Inject(method = "renderItemHotbar", at = @At("RETURN"))
+	private void bloodborne$renderBloodborneHud(GuiGraphics guiGraphics, DeltaTracker deltaTracker, CallbackInfo ci) {
+		if (minecraft.player != null && HealthHudClient.shouldUseBloodborneHud(minecraft.player)) {
 			HealthHudClient.renderHud(guiGraphics);
 		}
-	}
 
-	@Inject(method = "renderItemHotbar", at = @At("RETURN"))
-	private void bloodborne$renderOffhandHud(GuiGraphics guiGraphics, DeltaTracker deltaTracker, CallbackInfo ci) {
 		HunterPistolClient.renderAmmoHud(guiGraphics);
 		BloodVialHudClient.renderOffhandHud(guiGraphics);
 	}

@@ -36,7 +36,7 @@ public final class BloodVialHudClient {
 		Minecraft client = Minecraft.getInstance();
 		Player player = client.player;
 
-		if (player == null || !HealthHudClient.shouldReplaceHearts(player)) {
+		if (player == null || !HealthHudClient.shouldUseBloodborneHud(player)) {
 			return;
 		}
 

@@ -2,6 +2,9 @@
   "required": true,
   "package": "dev.minecraftmods.bloodborne.mixin",
   "compatibilityLevel": "JAVA_17",
+  "mixins": [
+    "PlayerStaminaMixin"
+  ],
   "client": [
     "FogRendererMixin",
     "GuiMixin",
