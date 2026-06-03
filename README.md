@@ -253,10 +253,123 @@ Output: `build/libs/bloodborne-mod-1.0.0.jar` (version from `gradle.properties`)
 
 ## WorldEdit (optional)
 
-For building Central Yharnam-style areas:
+For building Central Yharnam-style areas.
+
+### Install
 
 1. Download WorldEdit for **Fabric 1.21.1**: [Modrinth](https://modrinth.com/plugin/worldedit/versions?l=fabric&g=1.21.1)
-2. Place the WorldEdit JAR in `run/mods/` when using `runClient`, or in your normal `mods` folder when playing from a built install.
+2. Put the WorldEdit `.jar` in:
+   - **`run/mods/`** when using `.\gradlew.bat runClient`, or
+   - your normal Minecraft **`mods`** folder when playing from a built install
+3. Restart the game. In chat, type `//version` — if WorldEdit is loaded, it prints the version.
+
+**Single-player:** enable **Allow Cheats** when creating the world (or open to LAN with cheats). WorldEdit commands need cheat permission.
+
+### How selections work (important)
+
+`//expand` does **not** move or resize blocks in the world by itself. It only changes the **selection box** (the region WorldEdit will affect on the next command like `//set` or `//replace`).
+
+You must have a **cuboid selection** before `//expand` does anything visible:
+
+1. `//wand` — gives the wooden axe tool
+2. **Left-click** a block → position 1 (pos1)
+3. **Right-click** another block → position 2 (pos2)
+
+Check that a selection exists:
+
+```mcfunction
+//size
+```
+
+If it says you have no selection, `//expand` will do nothing.
+
+**You often will not see the box.** On Fabric, WorldEdit usually does **not** draw a persistent outline (no glowing frame in the air). The quickstart screenshots assume you can see the region; in practice you verify with `//size` and optional mods (below).
+
+### Expanding the selection (from the WorldEdit quickstart)
+
+| Goal | Command | Notes |
+|------|---------|--------|
+| Grow **up** by 10 blocks | `//expand 10 up` | Same as `//expand 10 u` |
+| Grow **down** by 10 blocks | `//expand 10 down` | Same as `//expand 10 d` |
+| Grow **where you look** (horizontal) | `//expand 5` | Uses your facing; **look level**, not at sky/ground, or it expands up/down instead |
+| Grow **forward** relative to you | `//expand 5 me` | Same as “in front of you” |
+| Grow **up and down** equally | `//outset -v 5` | Adds 5 blocks up and 5 down |
+| Grow to world height | `//expand vert` | Selection from bedrock to build limit |
+
+Shrink the box: `//contract 10 down` (pulls the bottom face up by 10).
+
+**Example workflow**
+
+```mcfunction
+//wand
+```
+(set pos1 and pos2 on two corners of your building)
+
+```mcfunction
+//size
+//expand 10 up
+//size
+```
+
+The second `//size` should show **10 more blocks** on the Y size. Then fill or edit that larger region, e.g.:
+
+```mcfunction
+//set deepslate_bricks
+//replace sandstone dirt
+//set sandstone,glass
+```
+
+### “Expand says it worked but I don’t see anything”
+
+This is normal if chat reports success and `//size` changes.
+
+1. **Confirm the numbers changed** (before vs after):
+
+   ```mcfunction
+   //size
+   //expand 10 up
+   //size
+   ```
+
+   Example: `size = 10x20x15` → `10x30x15` means **10 blocks were added on Y** (taller selection). The world blocks did not move.
+
+2. **Nothing new appears in the world** until you edit. `//expand` only changes the invisible region. To *see* an effect, fill the new space (stand on top of your build or fly up first):
+
+   ```mcfunction
+   //set glass
+   ```
+
+   or `//replace air deepslate_bricks` in that region. Undo with `//undo` if it was a test.
+
+3. **`//expand 10 up` grows above your highest selected block.** If pos1/pos2 were the footprint of a house, the new volume is **empty air on top** of the roof. Look **up** or fly up — it is easy to miss from ground level.
+
+4. **See the selection outline (recommended):** install **[WorldEditCUI (Fabric)](https://modrinth.com/mod/worldeditcui-fabric)** for 1.21.1 and put it in the same `mods` / `run/mods` folder as WorldEdit. It draws the cuboid client-side. WorldEdit alone does not include this.
+
+5. **Optional:** `//drawsel` (creative, cuboid ≤ 48×48×48) — limited server-side outline; often skipped in favor of WorldEditCUI.
+
+### Other reasons expand seems wrong
+
+| Cause | What to do |
+|-------|------------|
+| No selection yet | Set pos1/pos2 with the wand first; confirm with `//size` |
+| Expecting blocks to move | `//expand` only moves the **selection**; run `//set` / `//replace` after if you want blocks changed |
+| `//size` did not change | Expand failed or wrong world; try `//expand 10 u` |
+| `//expand 5` went the wrong way | Without a direction, WorldEdit uses where you **look**; look **straight ahead**, horizontally |
+| Cheats off | Enable cheats on the world |
+| WorldEdit not loaded | `//version` in chat; check the JAR is in `mods` / `run/mods` |
+| Wrong game instance | After adding WorldEdit to `run/mods`, restart `runClient` |
+
+### Other useful commands
+
+| Command | Purpose |
+|---------|---------|
+| `//pos1` / `//pos2` | Set corners at your feet (no wand) |
+| `//hpos1` / `//hpos2` | Set corners at block you target |
+| `//desel` | Clear selection |
+| `//copy` / `//paste` | Copy/paste the selected region |
+| `//undo` / `//redo` | Undo/redo WorldEdit edits |
+
+Official docs: [WorldEdit selections](https://worldedit.enginehub.org/en/latest/usage/regions/selections/)
 
 ---
 

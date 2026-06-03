@@ -10,10 +10,10 @@ import net.minecraft.world.item.Tier;
 import net.minecraft.world.item.Tiers;
 
 public final class ModItems {
-	public static final Tier WEAPON_MATERIAL = Tiers.IRON;
+	public static final Tier WEAPON_MATERIAL = Tiers.NETHERITE;
 
 	/** Saw Cleaver — heavy, high damage. */
-	public static final int SAW_CLEAVER_DAMAGE = 8;
+	public static final int SAW_CLEAVER_DAMAGE = 231;
 	public static final float SAW_CLEAVER_SPEED = -2.8F;
 
 	/** Hunter Axe — balanced trick weapon. */
