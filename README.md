@@ -9,6 +9,7 @@ A Fabric mod that brings Bloodborne-style hunting to Minecraft 1.21.1: trick wea
 | **Trick weapons** | Saw Cleaver, Hunter Axe, Threaded Cane (melee, tuned damage/speed) |
 | **Consumables** | Blood Vial — drink to heal 4 hearts (stack of 20, 2s cooldown) |
 | **HUD** | Boss-style health + stamina bars (top-left); blood vial count; pistol ammo when offhand equipped |
+| **Quickstep** | Dodge roll on **R** (WASD direction, costs stamina, brief i-frames) |
 | **Firearm** | Hunter Pistol (offhand, **G** to fire, ammo bar) |
 | **Gear** | Hunter armor set (4 pieces), Hunter's Lantern |
 | **Atmosphere** | Permanent night; dark foliage and water; join fade + "Central Yharnam" title |
@@ -92,7 +93,8 @@ Enable cheats in single-player, or use a server/world that allows commands.
 - **Stamina bar** directly below health (same size, green fill). Drains while sprinting and on melee attacks / pistol shots; regens after a short delay when idle.
 - **Blood Echoes** replace the XP bar: gold number above the hotbar, green bar fill tracks progress within each 1,000 echoes.
 - **Blood vials:** item icon + number in a dark box under the stamina bar (e.g. `[vial] 12`). When a vial is in the **offhand**, the same panel appears above the offhand slot.
-- Tune stamina in `StaminaHandler.java` (`MAX_STAMINA`, `REGEN_PER_TICK`, `SPRINT_DRAIN_PER_TICK`, `ATTACK_COST`, `PISTOL_COST`).
+- Tune stamina in `StaminaHandler.java` (`MAX_STAMINA`, `REGEN_PER_TICK`, `SPRINT_DRAIN_PER_TICK`, `ATTACK_COST`, `PISTOL_COST`, `DODGE_COST`).
+- **Quickstep:** Press **R** to dodge in your movement direction (no input = backstep). Costs **22** stamina, ~8 tick cooldown, brief invulnerability. Tune in `QuickstepHandler.java`.
 - Mount health (when riding) stays vanilla. You still gain XP; only the bar is hidden.
 - Client code: `HealthHudClient`, `BloodVialHudClient`, `HudLabelRenderer`, `GuiMixin`.
 

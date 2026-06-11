@@ -1,9 +1,12 @@
 package dev.minecraftmods.bloodborne.mixin;
 
 import dev.minecraftmods.bloodborne.echo.EchoAccess;
+import dev.minecraftmods.bloodborne.stamina.DodgeCooldownAccess;
+import dev.minecraftmods.bloodborne.stamina.QuickstepHandler;
 import dev.minecraftmods.bloodborne.stamina.StaminaAccess;
 import dev.minecraftmods.bloodborne.stamina.StaminaCooldownAccess;
 import dev.minecraftmods.bloodborne.stamina.StaminaHandler;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
@@ -18,7 +21,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(Player.class)
-public abstract class PlayerStaminaMixin implements StaminaAccess, StaminaCooldownAccess, EchoAccess {
+public abstract class PlayerStaminaMixin implements StaminaAccess, StaminaCooldownAccess, EchoAccess, DodgeCooldownAccess {
 
 	@Unique
 	private static final String ECHO_NBT_KEY = "BloodborneEchoes";
@@ -37,6 +40,9 @@ public abstract class PlayerStaminaMixin implements StaminaAccess, StaminaCooldo
 
 	@Unique
 	private int bloodborne$staminaRegenDelay;
+
+	@Unique
+	private int bloodborne$dodgeCooldown;
 
 	@Inject(method = "defineSynchedData", at = @At("TAIL"))
 	private void bloodborne$definePlayerData(SynchedEntityData.Builder builder, CallbackInfo ci) {
@@ -66,6 +72,10 @@ public abstract class PlayerStaminaMixin implements StaminaAccess, StaminaCooldo
 
 		int cooldown = StaminaHandler.tickRegenCooldown(player);
 		StaminaHandler.serverTick(player, cooldown);
+
+		if (player instanceof ServerPlayer serverPlayer) {
+			QuickstepHandler.tickCooldown(serverPlayer);
+		}
 	}
 
 	@Inject(method = "attack", at = @At("HEAD"), cancellable = true)
@@ -134,5 +144,15 @@ public abstract class PlayerStaminaMixin implements StaminaAccess, StaminaCooldo
 	@Override
 	public void bloodborne$addBloodEchoes(int amount) {
 		bloodborne$setBloodEchoes(bloodborne$getBloodEchoes() + amount);
+	}
+
+	@Override
+	public int bloodborne$getDodgeCooldown() {
+		return bloodborne$dodgeCooldown;
+	}
+
+	@Override
+	public void bloodborne$setDodgeCooldown(int ticks) {
+		bloodborne$dodgeCooldown = Math.max(0, ticks);
 	}
 }
