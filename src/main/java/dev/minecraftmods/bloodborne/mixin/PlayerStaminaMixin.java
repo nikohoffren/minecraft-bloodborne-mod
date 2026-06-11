@@ -1,8 +1,10 @@
 package dev.minecraftmods.bloodborne.mixin;
 
+import dev.minecraftmods.bloodborne.echo.EchoAccess;
 import dev.minecraftmods.bloodborne.stamina.StaminaAccess;
 import dev.minecraftmods.bloodborne.stamina.StaminaCooldownAccess;
 import dev.minecraftmods.bloodborne.stamina.StaminaHandler;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
@@ -16,7 +18,10 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(Player.class)
-public abstract class PlayerStaminaMixin implements StaminaAccess, StaminaCooldownAccess {
+public abstract class PlayerStaminaMixin implements StaminaAccess, StaminaCooldownAccess, EchoAccess {
+
+	@Unique
+	private static final String ECHO_NBT_KEY = "BloodborneEchoes";
 
 	@Unique
 	private static final EntityDataAccessor<Float> BLOODBORNE_STAMINA = SynchedEntityData.defineId(
@@ -25,11 +30,30 @@ public abstract class PlayerStaminaMixin implements StaminaAccess, StaminaCooldo
 	);
 
 	@Unique
+	private static final EntityDataAccessor<Integer> BLOODBORNE_ECHOES = SynchedEntityData.defineId(
+			Player.class,
+			EntityDataSerializers.INT
+	);
+
+	@Unique
 	private int bloodborne$staminaRegenDelay;
 
 	@Inject(method = "defineSynchedData", at = @At("TAIL"))
-	private void bloodborne$defineStamina(SynchedEntityData.Builder builder, CallbackInfo ci) {
+	private void bloodborne$definePlayerData(SynchedEntityData.Builder builder, CallbackInfo ci) {
 		builder.define(BLOODBORNE_STAMINA, StaminaHandler.MAX_STAMINA);
+		builder.define(BLOODBORNE_ECHOES, 0);
+	}
+
+	@Inject(method = "addAdditionalSaveData", at = @At("TAIL"))
+	private void bloodborne$savePlayerData(CompoundTag tag, CallbackInfo ci) {
+		tag.putInt(ECHO_NBT_KEY, bloodborne$getBloodEchoes());
+	}
+
+	@Inject(method = "readAdditionalSaveData", at = @At("TAIL"))
+	private void bloodborne$loadPlayerData(CompoundTag tag, CallbackInfo ci) {
+		if (tag.contains(ECHO_NBT_KEY)) {
+			bloodborne$setBloodEchoes(tag.getInt(ECHO_NBT_KEY));
+		}
 	}
 
 	@Inject(method = "tick", at = @At("TAIL"))
@@ -95,5 +119,20 @@ public abstract class PlayerStaminaMixin implements StaminaAccess, StaminaCooldo
 	@Override
 	public void bloodborne$setStaminaRegenDelay(int ticks) {
 		bloodborne$staminaRegenDelay = Math.max(0, ticks);
+	}
+
+	@Override
+	public int bloodborne$getBloodEchoes() {
+		return ((Player) (Object) this).getEntityData().get(BLOODBORNE_ECHOES);
+	}
+
+	@Override
+	public void bloodborne$setBloodEchoes(int amount) {
+		((Player) (Object) this).getEntityData().set(BLOODBORNE_ECHOES, Math.max(0, amount));
+	}
+
+	@Override
+	public void bloodborne$addBloodEchoes(int amount) {
+		bloodborne$setBloodEchoes(bloodborne$getBloodEchoes() + amount);
 	}
 }

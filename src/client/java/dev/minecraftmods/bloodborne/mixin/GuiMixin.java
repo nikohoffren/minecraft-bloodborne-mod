@@ -1,6 +1,8 @@
 package dev.minecraftmods.bloodborne.mixin;
 
+import dev.minecraftmods.bloodborne.client.BloodEchoExperienceHud;
 import dev.minecraftmods.bloodborne.client.BloodVialHudClient;
+import dev.minecraftmods.bloodborne.client.EnemyTargetHudClient;
 import dev.minecraftmods.bloodborne.client.HealthHudClient;
 import dev.minecraftmods.bloodborne.client.HunterPistolClient;
 import net.minecraft.client.DeltaTracker;
@@ -65,16 +67,18 @@ public class GuiMixin {
 	}
 
 	@Inject(method = "renderExperienceBar", at = @At("HEAD"), cancellable = true)
-	private void bloodborne$hideExperienceBar(GuiGraphics guiGraphics, int x, CallbackInfo ci) {
+	private void bloodborne$renderEchoExperienceBar(GuiGraphics guiGraphics, int x, CallbackInfo ci) {
 		if (minecraft.player != null && HealthHudClient.shouldUseBloodborneHud(minecraft.player)) {
 			ci.cancel();
+			BloodEchoExperienceHud.renderBar(guiGraphics, x);
 		}
 	}
 
 	@Inject(method = "renderExperienceLevel", at = @At("HEAD"), cancellable = true)
-	private void bloodborne$hideExperienceLevel(GuiGraphics guiGraphics, DeltaTracker deltaTracker, CallbackInfo ci) {
+	private void bloodborne$renderEchoLevel(GuiGraphics guiGraphics, DeltaTracker deltaTracker, CallbackInfo ci) {
 		if (minecraft.player != null && HealthHudClient.shouldUseBloodborneHud(minecraft.player)) {
 			ci.cancel();
+			BloodEchoExperienceHud.renderLevel(guiGraphics);
 		}
 	}
 
@@ -90,5 +94,6 @@ public class GuiMixin {
 
 		HunterPistolClient.renderAmmoHud(guiGraphics);
 		BloodVialHudClient.renderOffhandHud(guiGraphics);
+		EnemyTargetHudClient.render(guiGraphics);
 	}
 }

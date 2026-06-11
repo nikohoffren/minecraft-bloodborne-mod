@@ -1,5 +1,6 @@
 package dev.minecraftmods.bloodborne;
 
+import dev.minecraftmods.bloodborne.entity.BloodborneEntities;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerEntityEvents;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
 import net.minecraft.server.MinecraftServer;
@@ -54,6 +55,10 @@ public final class ModMobSpawns {
 	}
 
 	private static boolean shouldRemove(Entity entity) {
+		if (entity.getTags().contains(BloodborneEntities.MOB_TAG)) {
+			return false;
+		}
+
 		return isDisabled(entity.getType());
 	}
 

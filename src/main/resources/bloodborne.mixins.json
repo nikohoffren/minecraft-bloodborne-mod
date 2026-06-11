@@ -4,6 +4,7 @@
   "compatibilityLevel": "JAVA_17",
   "mixins": [
     "PlayerStaminaMixin",
+    "LivingEntityEchoRewardMixin",
     "NetherPortalBlockMixin",
     "WardenDiggingMixin",
     "WardenClericBeastMixin"

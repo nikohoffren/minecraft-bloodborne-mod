@@ -15,6 +15,8 @@
   "key.bloodborne.fire_pistol": "Fire Hunter Pistol",
   "key.categories.bloodborne": "Bloodborne",
   "hud.bloodborne.pistol_ammo": "Quicksilver Bullets: %s",
+  "hud.bloodborne.blood_echoes": "Blood Echoes: %s",
+  "message.bloodborne.echoes_gained": "+%s Blood Echoes",
   "subtitle.bloodborne.music.menu.main_theme": "Bloodborne — main theme",
   "subtitle.bloodborne.music.boss.cleric_beast": "Cleric Beast"
 }

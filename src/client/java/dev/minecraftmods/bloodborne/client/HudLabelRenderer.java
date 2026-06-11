@@ -15,6 +15,21 @@ public final class HudLabelRenderer {
 	private HudLabelRenderer() {
 	}
 
+	public static void drawBoxedLabelLeft(GuiGraphics graphics, int x, int y, Component label, int textColor) {
+		Minecraft client = Minecraft.getInstance();
+		int labelWidth = client.font.width(label);
+		int textY = y;
+
+		graphics.fill(
+				x - PADDING,
+				textY - PADDING,
+				x + labelWidth + PADDING,
+				textY + client.font.lineHeight + PADDING,
+				BACKGROUND_COLOR
+		);
+		graphics.drawString(client.font, label, x, textY, textColor, false);
+	}
+
 	public static void drawBoxedLabel(GuiGraphics graphics, int centerX, int y, Component label, int textColor) {
 		Minecraft client = Minecraft.getInstance();
 		int labelWidth = client.font.width(label);

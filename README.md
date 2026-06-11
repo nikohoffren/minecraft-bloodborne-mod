@@ -15,7 +15,9 @@ A Fabric mod that brings Bloodborne-style hunting to Minecraft 1.21.1: trick wea
 | **Music** | Vanilla music disabled; Bloodborne main theme on title screen; silent overworld; boss theme in arenas |
 | **Boss** | Cleric Beast (Warden) at Central Yharnam coords — boss bar, arena leash, one-time spawn per world |
 | **World look** | Grass and related blocks render as deepslate-style cobble/brick (no block replacement in the world) |
-| **Mobs** | Vanilla hostiles disabled (slimes, undead, creepers, spiders, illagers, etc.) — Cleric Beast still spawns |
+| **Mobs** | Vanilla hostiles disabled; **Scourge Hunters** (skeletons) in Central Yharnam; Cleric Beast boss |
+| **Blood Echoes** | Currency from kills; **XP bar + number above hotbar**; **+120** per Scourge Hunter, **8,000** for Cleric Beast |
+| **Enemy HUD** | Small boss-style health bar above tagged enemies (name + red bar) |
 | **Creative** | Vanilla swords and armor hidden from Combat tab; Bloodborne items added instead |
 
 ---
@@ -88,6 +90,7 @@ Enable cheats in single-player, or use a server/world that allows commands.
 - In **survival, adventure, and creative** (not spectator), **vanilla hearts, hunger, armor bar, and XP bar** are hidden. Custom health/stamina/vial HUD draws with the hotbar (so it appears in creative too).
 - A **compact boss-style health bar** is drawn at the **top-left** (110×4 px, red fill).
 - **Stamina bar** directly below health (same size, green fill). Drains while sprinting and on melee attacks / pistol shots; regens after a short delay when idle.
+- **Blood Echoes** replace the XP bar: gold number above the hotbar, green bar fill tracks progress within each 1,000 echoes.
 - **Blood vials:** item icon + number in a dark box under the stamina bar (e.g. `[vial] 12`). When a vial is in the **offhand**, the same panel appears above the offhand slot.
 - Tune stamina in `StaminaHandler.java` (`MAX_STAMINA`, `REGEN_PER_TICK`, `SPRINT_DRAIN_PER_TICK`, `ATTACK_COST`, `PISTOL_COST`).
 - Mount health (when riding) stays vanilla. You still gain XP; only the bar is hidden.

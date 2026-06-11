@@ -39,6 +39,14 @@ public final class HealthHudClient {
 		return !player.isSpectator();
 	}
 
+	public static int hudAnchorX() {
+		return BAR_X;
+	}
+
+	public static int staminaBarBottomY() {
+		return staminaBarY() + BAR_HEIGHT;
+	}
+
 	public static void renderHud(GuiGraphics graphics) {
 		Minecraft client = Minecraft.getInstance();
 		Player player = client.player;
@@ -49,7 +57,9 @@ public final class HealthHudClient {
 
 		renderHealthBar(graphics, player);
 		renderStaminaBar(graphics, player);
-		renderInventoryVialCount(graphics, player);
+
+		int vialPanelY = staminaBarBottomY() + VIAL_LABEL_GAP;
+		renderInventoryVialCount(graphics, player, BloodVialHudClient.countBloodVials(player), vialPanelY);
 	}
 
 	private static int staminaBarY() {
@@ -101,15 +111,17 @@ public final class HealthHudClient {
 	}
 
 	/** Total vials in inventory, shown under the stamina bar (top-left cluster). */
-	private static void renderInventoryVialCount(GuiGraphics graphics, Player player) {
-		int count = BloodVialHudClient.countBloodVials(player);
+	private static void renderInventoryVialCount(
+			GuiGraphics graphics,
+			Player player,
+			int count,
+			int panelY
+	) {
 		if (count <= 0) {
 			return;
 		}
 
-		int panelY = staminaBarY() + BAR_HEIGHT + VIAL_LABEL_GAP;
 		ItemStack iconStack = new ItemStack(ModItems.BLOOD_VIAL);
-
 		HudLabelRenderer.drawBoxedItemWithCount(graphics, BAR_X, panelY, iconStack, count, 0xFFCC4444);
 	}
 }

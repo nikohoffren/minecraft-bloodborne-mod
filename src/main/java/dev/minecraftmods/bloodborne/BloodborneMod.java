@@ -2,6 +2,7 @@ package dev.minecraftmods.bloodborne;
 
 import dev.minecraftmods.bloodborne.boss.ClericBeastBossManager;
 import dev.minecraftmods.bloodborne.command.BloodborneCommands;
+import dev.minecraftmods.bloodborne.mob.YharnamMobManager;
 import dev.minecraftmods.bloodborne.network.ModNetworking;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
@@ -27,6 +28,7 @@ public class BloodborneMod implements ModInitializer {
 		ModSounds.initialize();
 		ModMobSpawns.initialize();
 		ModNetworking.register();
+		YharnamMobManager.register();
 		ClericBeastBossManager.register();
 		BloodborneCommands.register();
 
